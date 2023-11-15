@@ -1,0 +1,7 @@
+pandas
+pyarrow
+pytest
+fsspec
+requests
+aiohttp
+yarl

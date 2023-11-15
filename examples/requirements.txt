@@ -1,0 +1,7 @@
+faker
+pandas
+pyarrow
+polars
+pyspark
+fastapi
+uvicorn[standard]

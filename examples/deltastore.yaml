@@ -1,0 +1,35 @@
+version: 1
+host: "127.0.0.1"
+port: 8080
+endpoint: "/deltastore"
+preSignedUrlTimeoutSeconds: 3600
+repository:
+  name: "DB"
+  configs:
+    - key: "enableCacheSync"
+      value: "true"
+    - key: "enableAutoRegister"
+      value: "false"
+  engines:
+    - name: "rocksdb"
+      configs:
+        - key: "engine"
+          value: "rocksdb"
+authorization:
+  name: "server"
+  configs:
+    - key: "endpoint"
+      value: "http://localhost:8000/authz"
+    - key: "username"
+      value: "testuser"
+    - key: "password"
+      value: "testpass"
+configuration:
+  name: "server"
+  configs:
+    - key: "endpoint"
+      value: "http://localhost:8000/config"
+    - key: "username"
+      value: "testuser"
+    - key: "password"
+      value: "testpass"

@@ -1,0 +1,39 @@
+version: 1
+host: "127.0.0.1"
+port: 8080
+endpoint: "/deltastore"
+preSignedUrlTimeoutSeconds: 3600
+repository:
+  name: "DB"
+  configs:
+    - key: "enableCacheSync"
+      value: "true"
+    - key: "enableAutoRegister"
+      value: "false"
+  engines:
+    - name: "rocksdb"
+      configs:
+        - key: "engine"
+          value: "rocksdb"
+filesystems:
+  - name: "minio"
+    configs:
+      - key: "fs.s3a.endpoint"
+        value: "http://localhost:9000"
+      - key: "fs.s3a.access.key"
+        value: "minioadmin"
+      - key: "fs.s3a.secret.key"
+        value: "minioadmin"
+      - key: "fs.s3a.path.style.access"
+        value: "true"
+shares:
+  - name: "deltastore"
+    schemas:
+      - name: "testsets"
+        tables:
+          - name: "testset100"
+            filesystem: "minio"
+            location: "s3a://testset100/"
+          - name: "testset100-multilogs"
+            filesystem: "minio"
+            location: "s3a://testset100-multilogs/"

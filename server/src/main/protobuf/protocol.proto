@@ -1,0 +1,86 @@
+/*
+ * Copyright (2020-present) The Delta Lake Project Authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+syntax = "proto2";
+
+package io.delta.sharing.server.protocol;
+
+import "scalapb/scalapb.proto";
+
+option java_package = "io.delta.sharing.server.protocol";
+
+option java_generate_equals_and_hash = true;
+option (scalapb.options).flat_package = true;
+
+// Define the JSON objects used by REST APIs. The table metadata format is not defined in this file
+// because it requires Map type which is not supported by Protocol Buffers Version 2.
+
+message Share {
+    optional string name = 1;
+}
+
+message Schema {
+    optional string name = 1;
+    optional string share = 2;
+}
+
+message Table {
+    optional string name = 1;
+    optional string schema = 2;
+    optional string share = 3;
+}
+
+message QueryTableRequest {
+    repeated string predicateHints = 1;
+    optional int64 limitHint = 2;
+
+    // The table version being queried.
+    // If not specified, the query is assumed to be for the latest version.
+    optional int64 version = 3;
+}
+
+message ListSharesResponse {
+    repeated Share items = 1;
+    optional string next_page_token = 2;
+}
+
+message GetShareResponse {
+    optional Share share = 1;
+}
+
+message ListSchemasResponse {
+    repeated Schema items = 1;
+    optional string next_page_token = 2;
+}
+
+message ListTablesResponse {
+    repeated Table items = 1;
+    optional string next_page_token = 2;
+}
+
+message ListAllTablesResponse {
+    repeated Table items = 1;
+    optional string next_page_token = 2;
+}
+
+// Define a special class to generate the page token for pagination. It includes the information we
+// need to know where we should start to query, and check whether the page token comes from the
+// right result. For example, we would like to throw an error when the user uses a page token
+// returning from ListShares and uses it in ListSchemas REST API.
+message PageToken {
+    optional string id = 1;
+    optional string share = 2;
+    optional string schema = 3;
+}
